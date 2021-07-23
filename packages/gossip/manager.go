@@ -309,6 +309,8 @@ func (m *Manager) handlePacket(data []byte, nbr *Neighbor) error {
 
 func marshal(packet pb.Packet) []byte {
 	packetType := packet.Type()
+	println("packetType=%i", packetType)
+
 	if packetType > 0xFF {
 		panic("invalid packet")
 	}
@@ -317,7 +319,11 @@ func marshal(packet pb.Packet) []byte {
 	if err != nil {
 		panic("invalid packet")
 	}
-	return append([]byte{byte(packetType)}, data...)
+	// return append([]byte{byte(packetType)}, data...)
+	wire_data := append([]byte{byte(packetType)}, data...)
+
+	println("len(wire_data)=%i", len(wire_data))
+	return wire_data
 }
 
 // MessageWorkerPoolStatus returns the name and the load of the workerpool.
