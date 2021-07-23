@@ -394,6 +394,7 @@ func (t *TCP) doHandshake(key ed25519.PublicKey, remoteAddr string, conn net.Con
 }
 
 func (t *TCP) readHandshakeRequest(conn net.Conn) (ed25519.PublicKey, []byte, error) {
+	println("Reading handshake request")
 	if err := conn.SetReadDeadline(time.Now().Add(handshakeTimeout)); err != nil {
 		return ed25519.PublicKey{}, nil, err
 	}
@@ -422,6 +423,7 @@ func (t *TCP) readHandshakeRequest(conn net.Conn) (ed25519.PublicKey, []byte, er
 }
 
 func (t *TCP) writeHandshakeResponse(reqData []byte, conn net.Conn) error {
+	println("Writing handshake response")
 	data, err := newHandshakeResponse(reqData)
 	if err != nil {
 		return err

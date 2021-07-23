@@ -21,15 +21,24 @@ func isExpired(ts int64) bool {
 }
 
 func newHandshakeRequest(toAddr string) ([]byte, error) {
+	println("new request")
+
 	m := &pb.HandshakeRequest{
 		Version:   versionNum,
 		To:        toAddr,
 		Timestamp: time.Now().Unix(),
 	}
-	return proto.Marshal(m)
+	bytes, error := proto.Marshal(m)
+	// for i := 0; i < len(bytes); i++ {
+	// 	println(bytes[i])
+	// }
+	return bytes, error
+	// return proto.Marshal(m)
 }
 
 func newHandshakeResponse(reqData []byte) ([]byte, error) {
+	println("new response")
+
 	m := &pb.HandshakeResponse{
 		ReqHash: server.PacketHash(reqData),
 	}
@@ -37,6 +46,8 @@ func newHandshakeResponse(reqData []byte) ([]byte, error) {
 }
 
 func (t *TCP) validateHandshakeRequest(reqData []byte) bool {
+	println("validating request")
+
 	m := new(pb.HandshakeRequest)
 	if err := proto.Unmarshal(reqData, m); err != nil {
 		t.log.Debugw("invalid handshake",
@@ -57,10 +68,13 @@ func (t *TCP) validateHandshakeRequest(reqData []byte) bool {
 		)
 	}
 
+	println("validating request: good")
 	return true
 }
 
 func (t *TCP) validateHandshakeResponse(resData []byte, reqData []byte) bool {
+	println("validating response")
+
 	m := new(pb.HandshakeResponse)
 	if err := proto.Unmarshal(resData, m); err != nil {
 		t.log.Debugw("invalid handshake",
@@ -75,5 +89,6 @@ func (t *TCP) validateHandshakeResponse(resData []byte, reqData []byte) bool {
 		return false
 	}
 
+	println("validating response: good")
 	return true
 }

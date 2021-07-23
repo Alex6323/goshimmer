@@ -316,6 +316,8 @@ func (m *Manager) keepPeerConnected(kp *knownPeer) {
 	defer ticker.Stop()
 
 	peerID := kp.peer.ID()
+	// kp.connDirection = ConnDirectionOutbound
+
 	for {
 		if kp.getConnStatus() == ConnStatusDisconnected {
 			m.log.Infow(
